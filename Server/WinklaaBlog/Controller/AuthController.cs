@@ -32,15 +32,15 @@ namespace WinklaaBlog.Controller
                 return BadRequest("Passwords do not match");
 
             var sqlCheckIfEmailExist = $"SELECT Email FROM Auth WHERE Email = '{userForRegistration.Email}'";
-            var existingUser = _dataContext.LoadDataSingle<string>(sqlCheckIfEmailExist);
-            if (existingUser.Any())
+            var existingUser = _dataContext.LoadDataOrDefaultSingle<string>(sqlCheckIfEmailExist);
+            if (existingUser != null)
                 return BadRequest("Email already exists");
 
             var passwordSalt = _authHelpers.GenerateSalt();
             var passwordHash = _authHelpers.GetPasswordHash(userForRegistration.Password, passwordSalt);
 
             var sqlAddAuth = $@"INSERT INTO Auth (Email, PasswordHash, PasswordSalt)
-                               VALUES ('{userForRegistration.Email}', @PasswordHash, @PasswordHash)";
+                               VALUES ('{userForRegistration.Email}', @PasswordHash, @PasswordSalt)";
 
             List<SqlParameter> sqlParameters = new List<SqlParameter>();
 
@@ -55,7 +55,7 @@ namespace WinklaaBlog.Controller
             if (!_dataContext.ExecuteSqlWithParameters(sqlAddAuth, sqlParameters))
                 return BadRequest("Adding User Failed");
 
-            var sqlAddUser = $@"INSERT INTO Users (Username, Email, Bio, AvatarUrl, CreateAt)
+            var sqlAddUser = $@"INSERT INTO Users (Username, Email, Bio, AvatarUrl, CreatedAt)
                          VALUES ( 
                             '{userForRegistration.Username}', 
                             '{userForRegistration.Email}', 

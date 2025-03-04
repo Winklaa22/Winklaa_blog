@@ -29,6 +29,11 @@ namespace WinklaaBlog.Data
             return DBConnection.QuerySingle<T>(sql);
         }
 
+        public T LoadDataOrDefaultSingle<T>(string sql)
+        {
+            return DBConnection.QuerySingleOrDefault<T>(sql);
+        }
+
         public bool ExecuteSql(string sql)
         {
             return DBConnection.Execute(sql) > 0;

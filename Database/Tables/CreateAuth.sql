@@ -3,5 +3,4 @@ CREATE TABLE Auth (
     PasswordHash NVARCHAR(255) NOT NULL,
     PasswordSalt NVARCHAR(255) NOT NULL,
     LastLogin DATETIME NULL,
-    FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
 );
