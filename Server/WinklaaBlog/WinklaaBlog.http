@@ -1,0 +1,6 @@
+@WinklaaBlog_HostAddress = http://localhost:5036
+
+GET {{WinklaaBlog_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
