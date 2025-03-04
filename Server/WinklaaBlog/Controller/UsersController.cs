@@ -32,7 +32,7 @@ namespace WinklaaBlog.Controller
         [HttpPost("CreateUser")]
         public IActionResult AddUser(UserToAdd user)
         {
-            var sql = $@"INSERT INTO Users (Username, Email, Bio, AvatarUrl, CreateAt)
+            var sql = $@"INSERT INTO Users (Username, Email, Bio, AvatarUrl, CreatedAt)
                          VALUES ( 
                             '{user.Username}', 
                             '{user.Email}', 

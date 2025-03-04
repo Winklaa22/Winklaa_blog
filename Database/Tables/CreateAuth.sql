@@ -1,6 +1,6 @@
 CREATE TABLE Auth (
 	Email NVARCHAR(100) PRIMARY KEY,
-    PasswordHash NVARCHAR(255) NOT NULL,
-    PasswordSalt NVARCHAR(255) NOT NULL,
+	PasswordHash VARBINARY(MAX),
+	PasswordSalt VARBINARY(MAX),
     LastLogin DATETIME NULL,
 );

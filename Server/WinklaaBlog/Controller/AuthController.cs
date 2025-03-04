@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Data;
+using System.Security.Cryptography;
 using WinklaaBlog.Data;
 using WinklaaBlog.DTO;
 using WinklaaBlog.Helpers;
@@ -63,10 +65,57 @@ namespace WinklaaBlog.Controller
                             '{userForRegistration.AvatarUrl}',
                             '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')";
 
-            if(_dataContext.ExecuteSql(sqlAddUser))
+            if (_dataContext.ExecuteSql(sqlAddUser))
                 return Ok();
 
             throw new Exception("Adding User Failed");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public IActionResult Login(UserForLogin userForLogin)
+        {
+            var sql = $"SELECT PasswordHash, PasswordSalt FROM Auth WHERE Email = '{userForLogin.Email}'";
+            var userForLoginConfirmation = new UserForLoginConfirmationDto();
+
+            try
+            {
+                userForLoginConfirmation = _dataContext.LoadDataSingle<UserForLoginConfirmationDto>(sql);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(401, e);
+            }
+
+            var passwordHash = _authHelpers.GetPasswordHash(userForLogin.Password, userForLoginConfirmation.PasswordSalt);
+
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != userForLoginConfirmation.PasswordHash[i])
+                {
+                    return StatusCode(401, "Incorrect password");
+                }
+            }
+
+            var getUserIdSql = $"SELECT Id FROM Users WHERE Email = '{userForLogin.Email}'";
+            var userId = _dataContext.LoadDataSingle<int>(getUserIdSql);
+
+            return Ok(new Dictionary<string, string>
+            {
+                {"token", _authHelpers.CreateToken(userId) }
+            });
+        }
+
+        [HttpGet("RefreshToken")]
+        public IActionResult RefreshToken()
+        {
+            var userIdSql = $@"SELECT Id FROM Users WHERE Id = {User.FindFirst("Id")?.Value + ""}";
+            var userId = _dataContext.LoadDataSingle<int>(userIdSql);
+
+            return Ok(new Dictionary<string, string>
+            {
+                {"token", _authHelpers.CreateToken(userId) }
+            });
         }
     }
 }
