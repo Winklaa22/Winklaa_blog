@@ -32,11 +32,10 @@ namespace WinklaaBlog.Controller
         [HttpPost("CreateUser")]
         public IActionResult AddUser(UserToAdd user)
         {
-            var sql = $@"INSERT INTO Users (Username, Email, PasswordHash, Bio, AvatarUrl, CreateAt)
+            var sql = $@"INSERT INTO Users (Username, Email, Bio, AvatarUrl, CreateAt)
                          VALUES ( 
                             '{user.Username}', 
                             '{user.Email}', 
-                            '{user.PasswordHash}', 
                             '{user.Bio}', 
                             '{user.AvatarUrl}',
                             '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')";

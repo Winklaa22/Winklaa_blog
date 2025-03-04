@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace WinklaaBlog.Helpers
@@ -24,6 +28,42 @@ namespace WinklaaBlog.Helpers
             );
 
             return hash;
+        }
+
+        public byte[] GenerateSalt()
+        {
+            var passwordSalt = new byte[128 / 8];
+            using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            rng.GetNonZeroBytes(passwordSalt);
+            return passwordSalt;
+        }
+
+        public string CreateToken(int userId)
+        {
+            var caims = new Claim[]
+            {
+                new Claim("userId", userId.ToString())
+            };
+
+            var keyValue = _configuration.GetSection("AppSettings:TokenKey")?.Value;
+            var tokenKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    keyValue != null ? keyValue : ""
+                )
+            );
+
+            var credentials = new SigningCredentials(tokenKey, SecurityAlgorithms.HmacSha512Signature);
+
+            var desctiptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(caims),
+                Expires = DateTime.Now.AddHours(24),
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.CreateToken(desctiptor);
+            return tokenHandler.WriteToken(securityToken);
         }
     }
 }
