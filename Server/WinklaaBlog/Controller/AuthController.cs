@@ -109,7 +109,7 @@ namespace WinklaaBlog.Controller
         [HttpGet("RefreshToken")]
         public IActionResult RefreshToken()
         {
-            var userIdSql = $@"SELECT Id FROM Users WHERE Id = {User.FindFirst("Id")?.Value + ""}";
+            var userIdSql = $@"SELECT Id FROM Users WHERE Id = {User.FindFirst("userId")?.Value + ""}";
             var userId = _dataContext.LoadDataSingle<int>(userIdSql);
 
             return Ok(new Dictionary<string, string>
