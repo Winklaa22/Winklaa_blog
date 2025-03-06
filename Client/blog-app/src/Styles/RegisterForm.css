@@ -1,5 +1,5 @@
 .register-container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 50px;
     background: #1e1e1e;
@@ -14,9 +14,9 @@
   }
   
   .register-container input, .register-container textarea {
-    width: 100%;
+    width: 90%;
     padding: 12px;
-    margin: 8px 0;
+    margin: 5px 0;
     border: 2px solid #444;
     background: #2a2a2a;
     color: #fff;
@@ -42,7 +42,7 @@
     font-size: 18px;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 15px;
     transition: background 0.3s;
   }
   .register-container label{
@@ -50,7 +50,10 @@
   }
 
   .register-container .registerInput{
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
   }
 
   .register-container button:hover {

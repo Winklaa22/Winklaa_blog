@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./RegisterForm.css";
+import ".././Styles/RegisterForm.css";
 import axios from 'axios';
 
 const RegisterForm = () => {
@@ -23,18 +23,15 @@ const RegisterForm = () => {
     });
   };
 
-  // Funkcja do wysyłania danych do backendu
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Sprawdzenie, czy hasła się zgadzają
     if (formData.password !== formData.passwordConfirm) {
       setError('Passwords do not match');
       return;
     }
 
     try {
-      // Wyślij dane rejestracji do backendu
       const response = await axios.post('http://localhost:5000/Auth/Register', formData);
       alert('Registration successful');
       console.log(response.data);
@@ -47,6 +44,7 @@ const RegisterForm = () => {
   return (
     <div className='register-container'>
       <h2>Register</h2>
+      <div className="register-form">
       <form onSubmit={handleSubmit}>
         <div className='registerInput'>
           <label>Email:</label>
@@ -109,6 +107,7 @@ const RegisterForm = () => {
         {error && <div style={{ color: 'red' }}>{error}</div>}
         <button type="submit">Register</button>
       </form>
+      </div>
     </div>
   );
 };
