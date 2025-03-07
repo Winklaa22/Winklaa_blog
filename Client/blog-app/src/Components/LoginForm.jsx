@@ -1,8 +1,10 @@
 import axios from "axios";
 import ".././Styles/form.css";
 import { useState } from "react";
-const LoginForm = () => {
+import { useNavigate } from 'react-router-dom';
 
+const LoginForm = () => {
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const[token, setToken] = useState('')
     const [formData, setFormData] = useState(
@@ -31,9 +33,9 @@ const LoginForm = () => {
             })
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
+                navigate('/profile');
                 console.log(response.data.token)
             }
-            alert('Login successful', response.data);
         } catch(err) {
             if (error.response) {
                 setError(error.response.data.message || 'Login failed');

@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
-import { useLocation  ,Link } from "react-router-dom";
+import { useLocation  ,Link,  useNavigate} from "react-router-dom";
 import ".././Styles/Header.css";
 
 const Header = () =>{
-    const location = useLocation();
+    const navigate = useNavigate();
+    const token = localStorage.getItem('authToken');
+    const logOut = () =>{
+        localStorage.removeItem('authToken')
+        navigate('/')
+    }
 
     return(
     <>
         <div className="header">
             <Link className="logo" to="/">Winklaa Blog</Link>
             <div className="links">
-                { location.pathname !== "/register" && (
-                <Link to="/register">Register</Link>
-                )}
-
-                { location.pathname !== "/login" && (
-                <Link to="/login">Login</Link>
+                {!token ? (
+                    <>
+                        <Link to="/register">Register</Link>
+                        <Link to="/login">Login</Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/profile">Profile</Link>
+                        <button onClick={() => logOut()}>Log Out</button>
+                    </>
                 )}
                 
             </div>
