@@ -1,0 +1,41 @@
+.header{
+    background-color: rgb(95, 95, 95);
+    box-shadow: 0px 13px 12px -12px rgba(0, 0, 0, 1);
+    display: flex;
+    justify-content:space-between;
+    padding: 1rem;
+}
+
+.header .logo{
+    margin-left: 1.2rem;
+    font-size: 2.5rem;
+    text-shadow: 4px 4px 15px rgba(66, 68, 90, 1);
+}
+
+.header a{
+    color: white;
+    text-decoration: none;
+}
+
+.header .links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 20rem;
+}
+
+.header .links a, .header .links button{
+    background: none;
+    border: 1px white solid;
+    border-radius: .5rem;
+    padding: .5rem 2rem .5rem 2rem;
+    font-size: 1.2rem;
+    transition: .3s ease-in-out;
+    color: white;
+}
+
+.header .links a:hover, .header .links button:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
