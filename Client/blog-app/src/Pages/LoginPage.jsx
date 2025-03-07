@@ -1,17 +1,17 @@
 import Header from "../Components/Header"
 import RegisterForm from "../Components/REgisterForm"
-import ".././Styles/RegisterLoginPage.css";
+import ".././Styles/RegisterLoginPage.css"
+import LoginForm from "../Components/LoginForm"
 
-const RegisterPage = () =>{
+const LoginPage = () =>{
     return(
-        <>
+        <div>
             <Header/>
             <div className="container">
-                <RegisterForm/>
+                <LoginForm/>
             </div>
-            
-        </>
+        </div>
     )
 }
 
-export default RegisterPage
+export default LoginPage

@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import ".././Styles/RegisterForm.css";
+import ".././Styles/form.css";
 import axios from 'axios';
+import InputField from './Inputfield';
+import profilePic from ".././Images/profilePic.jpg"
 
 const RegisterForm = () => {
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,9 +16,21 @@ const RegisterForm = () => {
     avatarUrl: ''
   });
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]; 
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); 
+      setFormData((prev) => ({
+        ...prev,
+        avatarUrl: preview
+      }));
+      console.log(formData.avatarUrl)
+    }
+  };
+
   const [error, setError] = useState('');
 
-  // Funkcja obsługująca zmiany w formularzu
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -42,31 +58,33 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className='register-container'>
+    <div className='form-container'>
       <h2>Register</h2>
       <div className="register-form">
       <form onSubmit={handleSubmit}>
-        <div className='registerInput'>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+        <div className={true && 'form-row'}>
+          <div className='formInput'>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className='formInput'> 
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
-        <div className='registerInput'> 
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='registerInput'>
+        <div className='formInput'>
           <label>Bio:</label>
           <textarea
             name="bio"
@@ -75,16 +93,20 @@ const RegisterForm = () => {
             required
           />
         </div>
-        <div className='registerInput'>
-          <label>Avatar URL:</label>
-          <input
-            type="url"
-            name="avatarUrl"
-            value={formData.avatarUrl}
-            onChange={handleChange}
-          />
+        <div className='formAvatar'>
+            <label>Profile Picture</label>
+            <div className={true && 'form-avatar-row'}>
+              <input  
+                type="file"
+                name='avatarUrl'
+                accept="image/*" 
+                onChange={handleImageChange} 
+              />
+              {<img src={preview ? preview : profilePic} alt="Preview" className="image-preview" />}
+            </div>
         </div>
-        <div className='registerInput'>
+        <div className={true && 'form-row'}>
+        <div className='formInput'>
           <label>Password:</label>
           <input
             type="password"
@@ -94,7 +116,7 @@ const RegisterForm = () => {
             required
           />
         </div>
-        <div className='registerInput'>
+        <div className='formInput'>
           <label>Confirm Password:</label>
           <input
             type="password"
@@ -104,8 +126,9 @@ const RegisterForm = () => {
             required
           />
         </div>
+        </div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
-        <button type="submit">Register</button>
+        <button type="submit">form</button>
       </form>
       </div>
     </div>
